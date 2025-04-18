@@ -1,0 +1,146 @@
+/* styles.css */
+
+/* Général */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 100%;
+    padding: 15px;
+}
+
+/* Titre principal */
+h1 {
+    font-size: 2.5rem;
+    color: #343a40;
+    margin-bottom: 30px;
+}
+
+/* Table responsive */
+.table-responsive {
+    margin-top: 20px;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.table th, .table td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.table th {
+    background-color: #343a40;
+    color: white;
+}
+
+.table td {
+    background-color: #fff;
+}
+
+/* Boutons */
+.btn {
+    padding: 8px 16px;
+    font-size: 1rem;
+    border-radius: 5px;
+}
+
+.btn-success, .btn-danger {
+    font-size: 0.9rem;
+}
+
+.btn-sm {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+}
+
+/* Responsive sur les petits écrans */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+    .table thead {
+        display: none; /* Cacher les en-têtes sur les très petits écrans */
+    }
+
+    .table tbody tr {
+        display: block;
+        margin-bottom: 15px;
+    }
+
+    .table tbody tr td {
+        display: block;
+        text-align: right;
+        position: relative;
+        padding-left: 50%;
+        border: none;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .table tbody tr td:before {
+        content: attr(data-label); /* Ajouter les en-têtes des colonnes comme contenu dynamique */
+        position: absolute;
+        left: 0;
+        width: 45%;
+        padding-left: 15px;
+        font-weight: bold;
+        text-align: left;
+        background-color: #f8f9fa;
+    }
+
+    .table tbody tr td:last-child {
+        border-bottom: 0;
+    }
+
+    .btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .btn-group {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+/* Styles de la barre de navigation (optionnel) */
+.navbar {
+    background-color: #343a40;
+    color: white;
+    padding: 10px;
+}
+
+.navbar a {
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+}
+
+.navbar a:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+.navbar-toggler {
+    border: none;
+}
+
+/* Pied de page (optionnel) */
+.footer {
+    background-color: #343a40;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}

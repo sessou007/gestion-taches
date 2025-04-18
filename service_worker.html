@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Application</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Bienvenue dans mon application</h1>
+    <audio id="alarmSound" src="/t/ALRMClok_Reveil electronique sonnerie 1 (ID 0035)_LS.mp3" preload="auto"></audio>
+
+    <script>
+        // Enregistrement du Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/t/service_worker.js')
+                .then(registration => {
+                    console.log('Service Worker enregistré avec succès:', registration);
+                })
+                .catch(error => {
+                    console.error('Échec de l\'enregistrement du Service Worker:', error);
+                });
+        }
+    </script>
+</body>
+</html>
