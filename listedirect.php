@@ -259,7 +259,7 @@ if ($isDirector) {
     <div class="main-content">
         <div class="mas-header">
             <div class="d-flex justify-content-between align-items-center">
-                <h1><i class="fas fa-users me-2"></i> Liste des Chefs de Service</h1>
+                <h1><i class="fas fa-users me-2"></i> Liste des agents</h1>
                 <button class="btn btn-outline-primary d-lg-none" onclick="toggleSidebar()">
                     <i class="fas fa-bars"></i>
                 </button>

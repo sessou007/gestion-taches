@@ -15,15 +15,15 @@
             <div class="carousel-container">
                 <div class="carousel-track">
                     <div class="carousel-slide active">
-                        <img src="images/po.jpg" alt="Planning et organisation">
+                    <img src="images/bio-guera-2.jpg" alt="Planning et organisation"  >
+                    <div class="slide-overlay"></div>
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="images/cm001.jpg" alt="Développement et suivi">
                         <div class="slide-overlay"></div>
                     </div>
                     <div class="carousel-slide">
-                        <img src="images/DES.jpg" alt="Développement et suivi">
-                        <div class="slide-overlay"></div>
-                    </div>
-                    <div class="carousel-slide">
-                        <img src="images/re.jpeg" alt="Rapports et évaluations">
+                        <img src="images/statue.jpg" alt="Rapports et évaluations">
                         <div class="slide-overlay"></div>
                     </div>
                 </div>
@@ -41,7 +41,7 @@
             </div>
 
             <!-- Barre de navigation -->
-            <div class="navbar-container">
+            <div class="navbar-container" style="margin-top: 30px;">
                 <nav class="navbar">
                     <img src="images/logo_masm.png" alt="Logo" class="logo">
                     <ul class="nav-menu">
