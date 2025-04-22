@@ -256,11 +256,11 @@ if (!$user) {
 </head>
 <body>
     <!-- Sidebar -->
-    <div class="sidebar-mas" id="sidebar">
+    <div class="sidebar-mas fixed-sidebar" id="sidebar">
         <div class="sidebar-brand">
             <img src="images/logo_masm.png" alt="Logo">
         </div>
-        
+
         <div class="sidebar-menu">
             <div class="sidebar-item">
                 <a href="dashboard.php" class="sidebar-link">
@@ -268,29 +268,110 @@ if (!$user) {
                     <span>Tableau de bord</span>
                 </a>
             </div>
-            
+
             <div class="sidebar-item">
                 <a href="tac.php" class="sidebar-link active">
                     <i class="fas fa-tasks"></i>
                     <span>Gestion des Tâches</span>
                 </a>
             </div>
-            
+
             <div class="sidebar-item">
                 <a href="rapport.php" class="sidebar-link">
                     <i class="fas fa-chart-bar"></i>
                     <span>Rapports</span>
                 </a>
             </div>
-            
+
             <div class="sidebar-item mt-4">
                 <a href="profiles.php" class="sidebar-link">
                     <i class="fas fa-user"></i>
-                    <span>Profile</span>
+                    <span>Profil</span>
                 </a>
             </div>
         </div>
     </div>
+
+    <style>
+        /* Sidebar fixe */
+        .fixed-sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: var(--sidebar-width, 280px);
+            background: linear-gradient(180deg, var(--mas-primary, #005f87), #004a6a);
+            color: white;
+            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .sidebar-brand {
+            padding: 1.5rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-brand img {
+            height: 60px;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-menu {
+            padding: 1.5rem 0;
+        }
+
+        .sidebar-item {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 25px;
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .sidebar-link:hover,
+        .sidebar-link.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-left: 4px solid var(--mas-secondary, #e67e22);
+        }
+
+        .sidebar-link i {
+            margin-right: 12px;
+            font-size: 1.1rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* Ajustement du contenu principal */
+        .main-content {
+            margin-left: var(--sidebar-width, 280px);
+            padding: 2rem;
+        }
+
+        /* Responsiveness pour petits écrans */
+        @media (max-width: 992px) {
+            .fixed-sidebar {
+                position: absolute;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease-in-out;
+            }
+
+            .fixed-sidebar.show {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
 
     <!-- Main Content -->
     <div class="main-content">
