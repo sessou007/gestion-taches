@@ -5,17 +5,22 @@ require 'config.php';
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// Vérifier le blocage CAPTCHA
+// Protection contre les attaques par force brute
+if (!isset($_SESSION['login_attempts'])) {
+    $_SESSION['login_attempts'] = 0;
+}
+
 if (isset($_SESSION['captcha_blocked_until']) && time() < $_SESSION['captcha_blocked_until']) {
     $remaining = ceil(($_SESSION['captcha_blocked_until'] - time()) / 60);
     die("Trop de tentatives. Revenez dans $remaining minutes.");
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+    // Nettoyage des entrées
+    $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+    $password = $_POST['password']; // Ne pas sanitizer pour le hachage
 
-    $_SESSION['attempted_email'] = $email;
+    $_SESSION['attempted_email'] = htmlspecialchars($email, ENT_QUOTES, 'UTF-8');
 
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $_SESSION['error_message'] = "Format email invalide.";
@@ -24,57 +29,63 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     try {
+        // Requête préparée avec jointure sécurisée
         $stmt = $pdo->prepare("SELECT u.*, d.department_name 
                              FROM Users u 
                              LEFT JOIN departments d ON u.department_id = d.department_id 
                              WHERE u.email = :email");
-        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        $stmt->bindValue(':email', $email, PDO::PARAM_STR);
         $stmt->execute();
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        // Protection contre le timing attack
+        $user = $stmt->fetch(PDO::FETCH_ASSOC) ?: [];
+        $validUser = false;
 
         if ($user) {
-            if (password_verify($password, $user['password'])) {
-                if ($user['active']) {
-                    unset($_SESSION['login_attempts']);
-                    
-                    // Création de la session
-                    $_SESSION['user_id'] = $user['user_id'];
-                    $_SESSION['poste_id'] = $user['poste_id'];
-                    $_SESSION['departments'] = $user['department_name'];
-                    $_SESSION['department_id'] = $user['department_id'];
+            $validUser = password_verify($password, $user['password']);
+        }
 
-                    // Vérification du rôle
-                    $stmt = $pdo->prepare("SELECT id FROM postes WHERE poste_name = 'supra_admin'");
-                    $stmt->execute();
-                    $postv = $stmt->fetch(PDO::FETCH_ASSOC);
+        // Vérification différée
+        if ($validUser) {
+            if ($user['active']) {
+                // Réinitialisation de session
+                session_regenerate_id(true);
+                $_SESSION = [];
+                
+                // Création de la session sécurisée
+                $_SESSION['user_id'] = (int)$user['user_id'];
+                $_SESSION['poste_id'] = (int)$user['poste_id'];
+                $_SESSION['departments'] = htmlspecialchars($user['department_name'], ENT_QUOTES, 'UTF-8');
+                $_SESSION['department_id'] = (int)$user['department_id'];
+                $_SESSION['last_activity'] = time();
 
-                    if ($postv['id'] === $user['poste_id']) {
-                        header('Location: home.php');
-                    } else {
-                        header('Location: dashboard.php');
-                    }
-                    exit();
-                } else {
-                    $_SESSION['error_message'] = "Compte désactivé. Contactez l'administrateur.";
-                }
+                // Validation du rôle
+                $stmt = $pdo->prepare("SELECT id FROM postes WHERE poste_name = 'supra_admin'");
+                $stmt->execute();
+                $postv = $stmt->fetch(PDO::FETCH_ASSOC) ?: [];
+
+                header('Location: dashboard.php');
+                exit();
             } else {
-                $_SESSION['error_message'] = "Mot de passe incorrect.";
-                $_SESSION['login_attempts'] = ($_SESSION['login_attempts'] ?? 0) + 1;
+                $_SESSION['error_message'] = "Compte désactivé. Contactez l'administrateur.";
             }
         } else {
-            $_SESSION['error_message'] = "Email non enregistré.";
-            $_SESSION['login_attempts'] = ($_SESSION['login_attempts'] ?? 0) + 1;
+            $_SESSION['error_message'] = "Identifiants incorrects.";
+            $_SESSION['login_attempts'] += 1;
         }
 
         if ($_SESSION['login_attempts'] >= 3) {
+            $_SESSION['captcha_blocked_until'] = time() + 1800;
             header('Location: captcha.php');
             exit();
         }
 
     } catch (PDOException $e) {
-        $_SESSION['error_message'] = "Erreur système. Veuillez réessayer.";
         error_log("Database error: " . $e->getMessage());
+        $_SESSION['error_message'] = "Erreur système. Veuillez réessayer.";
     }
+    header('Location: login.php');
+    exit();
 }
 ?>
 

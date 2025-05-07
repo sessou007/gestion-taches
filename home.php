@@ -120,16 +120,21 @@ if (!$user || $user['active'] == 0) {
         
         /* Navbar stylisée */
         .navbar {
-            background-color: var(--secondary-color);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            padding: 0.8rem 1rem;
+            background: linear-gradient(135deg, var(--primary-color), #1a252f);
+            box-shadow: 0 4px 20px rgba(58, 12, 163, 0.15);
+            padding: 0.8rem 2rem;
+            
+            
+            
         }
         
         .navbar-brand {
             display: flex;
             align-items: center;
-            font-weight: 600;
-            font-size: 1.4rem;
+            font-weight: 1000;
+            font-size: 1.6rem;
+            
+            letter-spacing: 0.5px;
             color: var(--text-light) !important;
             transition: all 0.3s ease;
         }
@@ -202,6 +207,7 @@ if (!$user || $user['active'] == 0) {
         
         .stats-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 12px 28px rgba(113, 163, 211, 0.62);
         }
         
         .stats-card .card-body {
@@ -350,40 +356,60 @@ if (!$user || $user['active'] == 0) {
     </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="home.php">
-                <img src="images/armo.png" alt="Logo" />
-                <span>Tableau de Bord</span>
+ <!-- Navbar Élégante -->
+ <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+         <!-- Logo et Nom -->
+         <a class="navbar-brand" href="dashboard.php">
+                <img src="images/logo-masm.png" alt="Logo Ministère" />
+                <span>Gestion des Tâches</span>
             </a>
 
+            <!-- Bouton menu burger (Responsive) -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+                <i class="fas fa-bars"></i>
             </button>
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item">
+                        <a class="nav-link" href="dashboard.php">
+                            <i class="fas fa-home"></i> Accueil
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="listdepart.php">
-                            <i class="fas fa-building me-1"></i> Directions
+                            <i class="fas fa-building"></i> Directions
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="listposte.php">
-                            <i class="fas fa-user-tie me-1"></i> Postes
+                            <i class="fas fa-user-tie"></i> Postes
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">
-                            <i class="fas fa-users-cog me-1"></i> Utilisateurs
+                        <a class="nav-link active" href="home.php">
+                            <i class="fas fa-users-cog"></i> Utilisateurs
                         </a>
                     </li>
                 </ul>
+                
+                <div class="d-flex align-items-center">
+                    <div class="dropdown">
+                        <a href="#" class="text-white dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle fa-lg me-2"></i>
+                          
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="profiles.php"><i class="fas fa-user me-2"></i> Profil</a></li>
+                            
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="logout.php"><i class="fas fa-sign-out-alt me-2"></i> Déconnexion</a></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
-
     <?php if ($notification): ?>
         <div class="notification">
             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -403,6 +429,67 @@ if (!$user || $user['active'] == 0) {
             </div>
         </div>
 
+
+
+        <!-- Ajouter cette section juste après le titre du tableau de bord -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="search-container mb-3">
+            <div class="input-group">
+                <span class="input-group-text bg-transparent border-end-0">
+                    <i class="fas fa-search text-secondary"></i>
+                </span>
+                <input 
+                    type="text" 
+                    id="userSearch" 
+                    class="form-control search-input" 
+                    placeholder="Rechercher un utilisateur..."
+                    aria-label="Recherche"
+                >
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Styles pour la barre de recherche */
+.search-container {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.search-input {
+    border-radius: 25px;
+    border: 2px solid var(--secondary-color);
+    padding: 12px 20px;
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
+    outline: none;
+}
+
+.input-group-text {
+    border-radius: 25px 0 0 25px !important;
+    border-right: none !important;
+    background-color: rgba(44, 62, 80, 0.05) !important;
+}
+</style>
+
+<script>
+// Script de recherche
+document.getElementById('userSearch').addEventListener('input', function(e) {
+    const searchTerm = e.target.value.toLowerCase();
+    const rows = document.querySelectorAll('.users-table tbody tr');
+    
+    rows.forEach(row => {
+        const name = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+        row.style.display = name.includes(searchTerm) ? '' : 'none';
+    });
+});
+</script>
         <!-- Statistiques -->
         <div class="row mb-4">
             <?php
@@ -587,7 +674,6 @@ if (!$user || $user['active'] == 0) {
             });
         }, 5000);
     </script>
-    
     <?php include 'footer.php'; ?>
 </body>
 </html>

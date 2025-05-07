@@ -343,6 +343,57 @@ if ($isDirector) {
             </div>
         </div>
         
+<!-- Ajouter cette section de recherche -->
+<div class="search-container mb-4 bg-white p-3 rounded shadow-sm">
+    <div class="input-group">
+        <span class="input-group-text bg-transparent border-end-0">
+            <i class="fas fa-search text-muted"></i>
+        </span>
+        <input 
+            type="text" 
+            id="searchInput" 
+            class="form-control search-input" 
+            placeholder="Rechercher un agent ..."
+            aria-label="Recherche"
+        >
+    </div>
+</div>
+
+<style>
+/* Styles pour la barre de recherche */
+.search-container {
+    max-width: 500px;
+    margin: 0 auto 2rem;
+    transition: all 0.3s ease;
+}
+
+.search-input {
+    border-radius: 25px;
+    border: 2px solid var(--mas-primary);
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    border-color: var(--mas-secondary);
+    box-shadow: 0 4px 12px rgba(230, 126, 34, 0.1);
+    outline: none;
+}
+
+.input-group-text {
+    border-radius: 25px 0 0 25px !important;
+    border-right: none !important;
+    background-color: rgba(0, 95, 135, 0.05);
+    padding-left: 1.5rem;
+}
+</style>
+
+
+
+
+
+        
         <div class="report-card bg-white p-4 rounded shadow-sm mb-4">
             <div class="table-responsive">
                 <table class="mas-table">
@@ -395,6 +446,20 @@ if ($isDirector) {
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('show');
         }
+
+        // Script de recherche
+document.getElementById('searchInput').addEventListener('input', function(e) {
+    const searchTerm = e.target.value.toLowerCase();
+    const rows = document.querySelectorAll('.mas-table tbody tr');
+    
+    rows.forEach(row => {
+        const nom = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+        const prenom = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+        row.style.display = (nom.includes(searchTerm) || (prenom.includes(searchTerm)) 
+            ? '' 
+            : 'none');
+    });
+});
     </script>
 </body>
 </html>

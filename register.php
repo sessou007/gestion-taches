@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt->execute([$first_name, $last_name, $email, $hashed_password, $position, $department_id]);
             // Message de succès
             echo '<script>
-            alert("Compte créé avec succès. Veuillez attendre l\'activation par le supra admin.");
+            alert("Compte créé avec succès. Veuillez attendre l\'activation par l\'administrateur.");
             window.location.href = "acceuil.php";
           </script>';
     exit; // Arrête l'exécution du script après l'affichage du message
@@ -92,8 +92,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            background-image: url('images/font.jpg');
-            background-size: cover;
+            background-image: url('images/pot.jpg');
+            background-size: 1300px 600px;
+            
             background-position: center;
             display: flex;
             justify-content: center;
@@ -102,9 +103,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         .register-container {
-            width: 85%;
+            width: 55%;
             max-width: 1000px;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(241, 244, 247, 0.95);
+            opacity: 12s;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
             overflow: hidden;
@@ -114,23 +116,48 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         .form-section {
             width: 60%;
             padding: 40px;
+            opacity: 12s;
         }
 
         .image-section {
-            width: 40%;
-            background: linear-gradient(135deg, var(--primary-color), #004a6a);
+            width: 47%;
+          
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
         }
 
-        .image-section img {
-            max-width: 100%;
-            height: auto;
-            filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.2));
+        .image-section {
+            width: 40%;
+            background: var(--primary-color);
+            
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
         }
 
+        .image-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent 0%, rgba(255, 255, 255, 0.1) 100%);
+            transform: rotate(30deg);
+        }
+
+        .image-section img {
+            width: 350px;
+            height: auto;
+            filter: drop-shadow(0 0.5rem 1rem rgba(0, 0, 0, 0.2));
+            position: relative;
+            z-index: 1;
+        }
         .form-title {
             color: var(--primary-color);
             font-weight: 600;
@@ -192,6 +219,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             border-radius: 8px;
             font-weight: 500;
             transition: all 0.3s;
+            
         }
 
         .btn-primary:hover {
@@ -215,8 +243,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         .action-buttons {
             display: flex;
-            gap: 15px;
+            gap: 25px;
             margin-top: 20px;
+
         }
 
         .action-buttons .btn {
@@ -318,7 +347,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
 
     <div class="image-section">
-        <img src="images/connexion.png" alt="Illustration d'inscription">
+        <img src="images/logo-masm.png" alt="Illustration d'inscription">
     </div>
 </div>
 

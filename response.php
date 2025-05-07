@@ -3,161 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestion des Tâches</title>
-    <!-- Bootstrap 5 CSS -->
+    <title>Tableau de Bord - Gestion des utilisateurs</title>
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-color: #3498db;
-            --secondary-color: #2c3e50;
-            --accent-color: #e74c3c;
-            --light-color: #ecf0f1;
-            --success-color: #28a745;
-            --dark-color: #343a40;
+               :root {
+            --primary-color:rgb(98, 100, 107);
+            --primary-light: #eef2ff;
+            --secondary-color:rgb(16, 12, 24);
+            --accent-color: #f72585;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --success-color:rgb(110, 177, 197);
+            --warning-color: #f8961e;
+            --danger-color: #ef233c;
+            --border-radius: 12px;
+            --box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
-        
         body {
-            font-family: 'Poppins', sans-serif;
-            overflow-x: hidden;
-            margin: 0;
-            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f5f7ff;
+            color: var(--dark-color);
+            line-height: 1.6;
         }
         
-        /* Navbar stylisée */
+        /* Navbar Élégante */
         .navbar {
-            background-color: var(--secondary-color);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            padding: 0.8rem 1rem;
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+            box-shadow: 0 4px 20px rgba(58, 12, 163, 0.15);
+            padding: 0.8rem 2rem;
         }
         
         .navbar-brand {
-            display: flex;
-            align-items: center;
+            font-family: 'Playfair Display', serif;
             font-weight: 600;
-            font-size: 1.4rem;
-            color: var(--light-color) !important;
-            transition: all 0.3s ease;
-        }
-        
-        .navbar-brand:hover {
-            transform: translateY(-2px);
+            font-size: 1.6rem;
+            color: white !important;
+            letter-spacing: 0.5px;
         }
         
         .navbar-brand img {
             height: 40px;
             margin-right: 12px;
-            transition: all 0.3s ease;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
         }
         
-        .navbar-brand:hover img {
-            transform: rotate(5deg);
-        }
-        
-        .navbar-nav .nav-link {
-            color: var(--light-color) !important;
+        .nav-link {
+            font-weight: 500;
             padding: 0.8rem 1.2rem;
             margin: 0 0.2rem;
-            border-radius: 6px;
-            font-weight: 500;
-            transition: all 0.3s ease;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
             position: relative;
-            display: flex;
-            align-items: center;
+            color: rgba(255,255,255,0.9) !important;
         }
         
-        .navbar-nav .nav-link i {
-            margin-right: 8px;
-            font-size: 1.1rem;
-        }
-        
-        .navbar-nav .nav-link::before {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 3px;
-            background-color: var(--success-color);
-            transition: width 0.3s ease;
-        }
-        
-        .navbar-nav .nav-link:hover::before {
-            width: 80%;
-        }
-        
-        .navbar-nav .nav-link.active {
-            color: var(--light-color) !important;
-            background-color: rgba(255, 255, 255, 0.15);
-        }
-        
-        .navbar-nav .nav-link:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+        .nav-link:hover {
+            background-color: rgba(255,255,255,0.15);
             transform: translateY(-2px);
+            color: white !important;
         }
         
-        /* Menu burger */
-        .navbar-toggler {
-            border: none;
-            padding: 0.5rem;
+        .nav-link.active {
+            background-color: rgba(255,255,255,0.2);
+            font-weight: 600;
         }
         
-        .navbar-toggler:focus {
-            box-shadow: none;
+        .nav-link i {
+            margin-right: 8px;
         }
         
-        .navbar-toggler-icon {
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
-        }
-        
-        /* Responsive design */
-        @media (max-width: 992px) {
-            .navbar-nav {
-                margin-top: 1rem;
-            }
-            
-            .nav-item {
-                margin-bottom: 0.5rem;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .navbar-brand {
-                font-size: 1.2rem;
-            }
-            
-            .navbar-brand img {
-                height: 35px;
-            }
-            
-            .navbar-nav .nav-link {
-                padding: 0.8rem 1rem;
-            }
-        }
     </style>
 </head>
 <body>
-    <!-- Navbar intégrée -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
+<!-- Navbar Élégante -->
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
         <div class="container-fluid">
-            <!-- Logo et Nom -->
-            <a class="navbar-brand" href="#">
-                <img src="images/armo.png" alt="Armoirie du Bénin" />
-                <span>Gestion des Tâches</span>
+            <a class="navbar-brand" href="">
+                <img src="images/armo.png" alt="Logo" />
+                <span>Tableau de Bord</span>
             </a>
 
-            <!-- Bouton menu burger (Responsive) -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <!-- Contenu de la navbar -->
             <div class="collapse navbar-collapse" id="navbarNav">
-                <!-- Liens principaux -->
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="dashboard.php">
@@ -165,7 +101,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="listdepart.php">
+                        <a class="nav-link active" href="listdepart.php">
                             <i class="fas fa-building"></i> Directions
                         </a>
                     </li>
@@ -174,12 +110,31 @@
                             <i class="fas fa-user-tie"></i> Postes
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="home.php">
+                            <i class="fas fa-users-cog"></i> Utilisateurs
+                        </a>
+                    </li>
                 </ul>
+                
+                <div class="d-flex align-items-center">
+                    <div class="dropdown">
+                        <a href="#" class="text-white dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle fa-lg"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="profiles.php"><i class="fas fa-user me-2"></i> Profil</a></li>
+        
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="logout.php"><i class="fas fa-sign-out-alt me-2"></i> Déconnexion</a></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
-
-    <!-- Bootstrap JS Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<br><br>
+    
+    <?php include 'footer.php'; ?>
 </body>
 </html>

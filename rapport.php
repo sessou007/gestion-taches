@@ -16,18 +16,18 @@ function getRapportPeriode($periodeType) {
     $query = "";
     switch ($periodeType) {
         case 'journalier':
-            $query = "SELECT DISTINCT e.titre, e.description, e.debut, e.fin, e.status, e.raison
+            $query = "SELECT DISTINCT e.titre, e.description, e.debut, e.fin, e.status, e.raison, e.actions_menes
                       FROM evenement e
                       WHERE e.DELETED = 0 AND e.user_id = :user_id AND DATE(e.debut) = CURDATE()";
             break;
         case 'mensuel':
-            $query = "SELECT DISTINCT e.titre, e.description, e.debut, e.fin, e.status, e.raison
+            $query = "SELECT DISTINCT e.titre, e.description, e.debut, e.fin, e.status, e.raison, e.actions_menes
                       FROM evenement e
                       WHERE e.DELETED = 0 AND e.user_id = :user_id 
                       AND YEAR(e.debut) = YEAR(CURDATE()) AND MONTH(e.debut) = MONTH(CURDATE())";
             break;
         case 'annuel':
-            $query = "SELECT DISTINCT e.titre, e.description, e.debut, e.fin, e.status, e.raison
+            $query = "SELECT DISTINCT e.titre, e.description, e.debut, e.fin, e.status, e.raison, e.actions_menes
                       FROM evenement e
                       WHERE e.DELETED = 0 AND e.user_id = :user_id 
                       AND YEAR(e.debut) = YEAR(CURDATE())";
@@ -330,7 +330,7 @@ foreach ($rapportData as $data) {
 
             <a href="profiles.php" class="sidebar-link mt-4">
                 <i class="fas fa-user"></i>
-                <span>Profil</span>
+                <span>Profile</span>
             </a>
         </div>
     </div>
@@ -412,8 +412,9 @@ foreach ($rapportData as $data) {
         }
     </style>
 
-    <!-- Main Content -->
-    <div class="main-content">
+ <!-- Main Content -->
+ <div class="main-content">
+        <!-- Header -->
         <div class="mas-header">
             <div class="d-flex justify-content-between align-items-center">
                 <h1><i class="fas fa-chart-pie me-2"></i> Rapports d'Activités</h1>
@@ -509,32 +510,34 @@ foreach ($rapportData as $data) {
                             <th>Date Début</th>
                             <th>Date Fin</th>
                             <th>Statut</th>
+                            <th>Actions Menées</th>
                             <th>Raison</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php
-                        if (empty($tasks)) {
-                            echo '<tr><td colspan="6" class="text-center py-4">Aucune tâche trouvée pour cette période</td></tr>';
-                        } else {
-                            foreach ($tasks as $task) {
-                                $statusClass = '';
-                                if ($task['status'] == 'effectué') $statusClass = 'badge-effectue';
-                                if ($task['status'] == 'non effectué') $statusClass = 'badge-non-effectue';
-                                if ($task['status'] == 'en cours') $statusClass = 'badge-en-cours';
-                                
-                                echo '<tr>
-                                        <td>'.htmlspecialchars($task['titre']).'</td>
-                                        <td>'.htmlspecialchars($task['description']).'</td>
-                                        <td>'.date('d/m/Y H:i', strtotime($task['debut'])).'</td>
-                                        <td>'.($task['fin'] ? date('d/m/Y H:i', strtotime($task['fin'])) : '-').'</td>
-                                        <td><span class="badge rounded-pill '.$statusClass.'">'.$task['status'].'</span></td>
-                                        <td>'.($task['status'] == 'non effectué' ? htmlspecialchars($task['raison']) : '-').'</td>
-                                      </tr>';
-                            }
-                        }
-                        ?>
-                    </tbody>
+    <?php
+    if (empty($tasks)) {
+        echo '<tr><td colspan="7" class="text-center py-4">Aucune tâche trouvée pour cette période</td></tr>';
+    } else {
+        foreach ($tasks as $task) {
+            $statusClass = '';
+            if ($task['status'] == 'effectué') $statusClass = 'badge-effectue';
+            if ($task['status'] == 'non effectué') $statusClass = 'badge-non-effectue';
+            if ($task['status'] == 'en cours') $statusClass = 'badge-en-cours';
+            
+            echo '<tr>
+                    <td>'.htmlspecialchars($task['titre']).'</td>
+                    <td>'.htmlspecialchars($task['description']).'</td>
+                    <td>'.date('d/m/Y H:i', strtotime($task['debut'])).'</td>
+                    <td>'.($task['fin'] ? date('d/m/Y H:i', strtotime($task['fin'])) : '-').'</td>
+                    <td><span class="badge rounded-pill '.$statusClass.'">'.$task['status'].'</span></td>
+                    <td>'.($task['status'] == 'effectué' ? htmlspecialchars($task['actions_menes'] ?? '') : '-').'</td>
+                    <td>'.($task['status'] == 'non effectué' ? htmlspecialchars($task['raison'] ?? '') : '-').'</td>
+                  </tr>';
+        }
+    }
+    ?>
+</tbody>
                 </table>
             </div>
             <div class="text-end mt-3">

@@ -64,8 +64,6 @@
             transition: all 0.3s ease;
         }
         
-        
-        
         .navbar-nav .nav-link {
             color: var(--dark-color) !important;
             padding: 0.8rem 1.5rem;
@@ -360,6 +358,35 @@
                 box-shadow: none;
             }
         }
+
+
+
+
+
+
+
+
+
+
+
+        .navbar {
+            background: linear-gradient(135deg, var(--light-color) 0%, var(--light-color) 100%);
+            box-shadow: 0 4px 20px rgba(58, 12, 163, 0.15);
+            padding: 0.8rem 2rem;
+        }
+        
+        .navbar-brand {
+         
+            font-weight: 600;
+            font-size: 1.6rem;
+            
+            letter-spacing: 0.5px;
+        }
+        
+        
+        
+       
+        
     </style>
 </head>
 <body>
@@ -416,28 +443,30 @@
                     </li>
                 </ul>
 
-               <!-- Menu utilisateur -->
-               <div class="dropdown">
-                    <a href="#" class="dropdown-toggle" id="userMenu" data-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-user-circle fa-2x"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
-                        <li>
-                            <a class="dropdown-item" href="profiles.php">
-                                <i class="fas fa-user"></i> Profile
-                            </a>
-                        </li>
-                        
-                        <li><hr class="dropdown-divider"></li>
-                        <li>
-                            <a class="dropdown-item" href="logout.php">
-                                <i class="fas fa-sign-out-alt"></i> Déconnexion
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
-
+                <!-- Menu utilisateur avec profil et déconnexion -->
+                <div class="d-flex align-items-center">
+                    <div class="dropdown">
+                    <a href="#" class="text-dark dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown">
+    <i class="fas fa-user-circle fa-lg"></i>
+</a>
+                        </a>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li>
+                                <a class="dropdown-item" href="profiles.php">
+                                    <i class="fas fa-user-circle"></i> Mon Profil
+                                </a>
+                            </li>
+                             
+                            
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" href="logout.php">
+                                    <i class="fas fa-sign-out-alt"></i> Déconnexion
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

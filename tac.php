@@ -30,14 +30,14 @@ if (!isset($_SESSION['user_id'])) {
 include 'config.php';
 $userId = $_SESSION['user_id']; // Récupérer l'ID utilisateur depuis la session
 
-// Récupérer les événements non supprimés de la table 'evenement'
-$query = "SELECT id, titre, description, debut, fin, status, button_disabled 
+// Récupération des événements
+$query = "SELECT id, titre, description, debut, fin, status, button_disabled, actions_menes 
           FROM evenement 
-          WHERE DELETED = 0 AND user_id = :user_id"; // Filtrage des événements non supprimés et appartenant à l'utilisateur
+          WHERE DELETED = 0 AND user_id = :user_id";
 $stmt = $pdo->prepare($query);
 $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
 $stmt->execute();
-$result = $stmt->fetchAll(PDO::FETCH_ASSOC); // Récupérer tous les résultats
+$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 $user_id = $_SESSION['user_id'];
 $stmt = $pdo->prepare("SELECT active FROM Users WHERE user_id = :user_id");
@@ -286,7 +286,7 @@ if (!$user) {
             <div class="sidebar-item mt-4">
                 <a href="profiles.php" class="sidebar-link">
                     <i class="fas fa-user"></i>
-                    <span>Profil</span>
+                    <span>Profile</span>
                 </a>
             </div>
         </div>
@@ -385,8 +385,8 @@ if (!$user) {
             </div>
         </div>
         
-        <!-- Tableau des tâches -->
-        <div class="report-card bg-white p-4 rounded shadow-sm">
+<!-- Tableau des tâches -->
+<div class="report-card bg-white p-4 rounded shadow-sm">
             <div class="table-responsive">
                 <table class="mas-table">
                     <thead>
@@ -406,31 +406,27 @@ if (!$user) {
                             <td data-label="Date de Début"><?= date('d/m/Y H:i', strtotime($row['debut'])) ?></td>
                             <td data-label="Date de Fin"><?= date('d/m/Y H:i', strtotime($row['fin'])) ?></td>
                             <td data-label="Statut">
-                                <?php if (isset($row['status'])): ?>
-                                    <?php if ($row['status'] === 'effectué'): ?>
-                                        <span class="badge rounded-pill badge-effectue">
-                                            <i class="fas fa-check-circle me-1"></i> Effectué
-                                        </span>
-                                    <?php elseif ($row['status'] === 'non effectué'): ?>
-                                        <span class="badge rounded-pill badge-non-effectue">
-                                            <i class="fas fa-times-circle me-1"></i> Non Effectué
-                                        </span>
-                                    <?php else: ?>
-                                        <div class="action-buttons">
-                                            <button class="btn btn-validate btn-action" 
-                                                    id="effectueButton_<?= $row['id'] ?>" 
-                                                    onclick="updateStatus(<?= $row['id'] ?>, 'effectue')" 
-                                                    <?= $row['button_disabled'] ? 'disabled' : '' ?>>
-                                                <i class="fas fa-check"></i> Effectué
-                                            </button>
-                                            <button class="btn btn-reject btn-action" 
-                                                    id="nonEffectueButton_<?= $row['id'] ?>" 
-                                                    onclick="requestReason(<?= $row['id'] ?>)" 
-                                                    <?= $row['button_disabled'] ? 'disabled' : '' ?>>
-                                                <i class="fas fa-times"></i> Non effectué
-                                            </button>
-                                        </div>
-                                    <?php endif; ?>
+                                <?php if ($row['status'] === 'effectué'): ?>
+                                    <span class="badge rounded-pill badge-effectue">
+                                        <i class="fas fa-check-circle me-1"></i> Effectué
+                                    </span>
+                                <?php elseif ($row['status'] === 'non effectué'): ?>
+                                    <span class="badge rounded-pill badge-non-effectue">
+                                        <i class="fas fa-times-circle me-1"></i> Non Effectué
+                                    </span>
+                                <?php else: ?>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-validate btn-action" 
+                                                onclick="requestActions(<?= $row['id'] ?>)" 
+                                                <?= $row['button_disabled'] ? 'disabled' : '' ?>>
+                                            <i class="fas fa-check"></i> Effectué
+                                        </button>
+                                        <button class="btn btn-reject btn-action" 
+                                                onclick="requestReason(<?= $row['id'] ?>)" 
+                                                <?= $row['button_disabled'] ? 'disabled' : '' ?>>
+                                            <i class="fas fa-times"></i> Non effectué
+                                        </button>
+                                    </div>
                                 <?php endif; ?>
                             </td>
                         </tr>
@@ -446,12 +442,28 @@ if (!$user) {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <script>
-        // Toggle sidebar sur mobile
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('show');
+        function requestActions(id) {
+            Swal.fire({
+                title: 'Actions menées',
+                input: 'textarea',
+                inputPlaceholder: 'Décrivez les actions réalisées pour cette tâche...',
+                inputAttributes: { 'aria-label': 'Entrez les actions ici' },
+                showCancelButton: true,
+                confirmButtonText: 'Confirmer',
+                cancelButtonText: 'Annuler',
+                confirmButtonColor: '#2ec4b6',
+                cancelButtonColor: '#f72585',
+                inputValidator: (value) => {
+                    if (!value) return 'Vous devez décrire les actions menées !';
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    updateStatus(id, 'effectue', null, result.value);
+                }
+            });
         }
-        
-        function updateStatus(id, status, reason = null) {
+
+        function updateStatus(id, status, reason = null, actions = null) {
             Swal.fire({
                 title: 'Confirmation',
                 text: `Voulez-vous vraiment marquer cette tâche comme ${status === 'effectue' ? 'effectuée' : 'non effectuée'} ?`,
@@ -467,7 +479,12 @@ if (!$user) {
                     $.ajax({
                         url: 'update_status.php',
                         type: 'POST',
-                        data: { id: id, status: status, reason: reason },
+                        data: { 
+                            id: id, 
+                            status: status, 
+                            reason: reason,
+                            actions: actions 
+                        },
                         beforeSend: function() {
                             Swal.fire({
                                 title: 'Traitement en cours',
@@ -486,7 +503,7 @@ if (!$user) {
                                     icon: 'success',
                                     confirmButtonColor: '#2ec4b6'
                                 }).then(() => {
-                                    updateButtonDisplay(id, status);
+                                    location.reload();
                                 });
                             } else {
                                 Swal.fire('Erreur', data.message || 'Erreur lors de la mise à jour', 'error');
@@ -499,7 +516,6 @@ if (!$user) {
                 }
             });
         }
-
         function updateButtonDisplay(id, status) {
             $('#effectueButton_' + id).hide();
             $('#nonEffectueButton_' + id).hide();

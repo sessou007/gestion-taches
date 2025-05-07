@@ -61,7 +61,7 @@
             <!-- Contenu principal -->
             <div class="hero-content">
                 <div class="hero-text animate-fade-in">
-                    <h1>Plateforme de Suivi des Activités</h1>
+                    <h1>Plateforme de Suivi des Activités des Agents</h1>
                     <p>
                         Bienvenue dans votre espace de gestion des tâches ! Cette plateforme vous offre une vision d'ensemble 
                         complète et intuitive sur vos missions et leur progression. Elle est conçue pour vous aider à 

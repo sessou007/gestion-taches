@@ -55,7 +55,7 @@ try {
     $stmt->execute();
     $postv1 = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $stmt = $pdo->prepare("SELECT id FROM postes  WHERE  poste_name = 'super admin'");
+    $stmt = $pdo->prepare("SELECT id FROM postes  WHERE  poste_name = 'supra_admin'");
     $stmt->execute();
     $postv2 = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -95,6 +95,7 @@ if (!$user) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
     <!-- Font Awesome pour les icônes -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
@@ -134,12 +135,146 @@ if (!$user) {
             width: 100%;
             height: 100%;
         }
+
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e67e22;
+            --success-color: #27ae60;
+            --text-light: #ecf0f1;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: #f8f9fa;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Style du tableau de bord */
+        .dashboard-header {
+            background: linear-gradient(135deg, var(--primary-color), #1a252f);
+            box-shadow: 0 4px 25px rgba(0,0,0,0.1);
+            padding: 1.5rem 0;
+        }
+
+        .dashboard-title {
+            color: var(--text-light);
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem;
+        }
+
+        .dashboard-card {
+            background: var(--glass-bg);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none !important;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .card-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+
+        .dashboard-card:hover .card-icon {
+            transform: scale(1.1);
+        }
+
+        .card-label {
+            color: var(--text-light);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            margin: 0;
+        }
+
+        .card-label::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: var(--text-light);
+            transition: width 0.3s ease;
+        }
+
+        .dashboard-card:hover .card-label::after {
+            width: 60%;
+        }
+
+        
+
+        /* Style du calendrier */
+        #calendar {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 2rem auto;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            max-width: 1000px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .dashboard-card {
+                min-height: 200px;
+                padding: 1.5rem;
+            }
+
+            .card-icon {
+                font-size: 3rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .dashboard-card {
+                min-height: 180px;
+            }
+        }
         
     </style>
     
-</head>
 
-<body>
+
+
 
  <!-- Inclure la barre de navigation -->
 
@@ -148,52 +283,50 @@ if (!$user) {
     <!-- Section des images sous forme de liens -->
     <div class="row text-center bg-secondary m-0">
     
+  <!-- En-tête -->
+  <div class="dashboard-header">
+        <div class="container">
+            <?php include('respons.php'); ?>
+            <h1 class="dashboard-title text-center mb-0">Suivi et Gestion des Tâches</h1>
+       
+    <!-- Contenu principal -->
+    <div class="container">
+        <!-- Cartes de navigation -->
+        <div class="dashboard-grid">
+            <?php if ($postid == $postv['id']) : ?>
+            <a href="listedirect.php" class="dashboard-card">
+                <i class="bi bi-people-fill card-icon text-success"></i>
+                <h3 class="card-label">Agents</h3>
+            </a>
+            <?php endif; ?>
 
-        <div class="row text-center bg-secondary w-100 m-0">
-        <?php include('respons.php'); ?>
-        <h1 class="text-center text-white p-3 w-100">Suivi et gestion des tâches</h1>
-        
-            <?php if ($postid == $postv['id']) { ?>
-                <div class="col-md-3 col-12 h-50 p-0">
-                    <a href="listedirect.php" class="d-flex flex-column justify-content-center align-items-center custom-link" style="height: 250px; text-decoration: none;">
-                        <i class="bi bi-people-fill custom-icon" style="font-size: 100px; width: 100%; color:green;"></i>
-                        <h5 class="text-white">AGENTS</h5>
-                    </a>
-                </div>
-            <?php } ?>
+            <a href="tac.php" class="dashboard-card">
+                <i class="bi bi-graph-up-arrow card-icon text-info"></i>
+                <h3 class="card-label">Tâches</h3>
+            </a>
 
-            <div class="col-md-3 col-12 h-50 p-0">
-                <a href="tac.php" class="d-flex flex-column justify-content-center align-items-center custom-link" style="height: 250px; text-decoration: none;">
-                    <i class="bi bi-graph-up-arrow custom-icon" style="font-size: 100px; width: 100%;"></i>
-                    <h5 class="text-white">TACHE</h5>
-                </a>
-            </div>
+            <a href="rapport.php" class="dashboard-card">
+                <i class="bi bi-stack card-icon text-warning"></i>
+                <h3 class="card-label">Rapports</h3>
+            </a>
 
-            <div class="col-md-3 col-12 h-50 p-0">
-                <a href="rapport.php" class="d-flex flex-column justify-content-center align-items-center custom-link" style="height: 250px; text-decoration: none;">
-                    <i class="bi bi-stack custom-icon" style="font-size: 100px; width: 100%; color:orange;"></i>
-                    <h5 class="text-white">RAPPORT</h5>
-                </a>
-            </div>
+            <?php if ($postid == $postv['id'] || $postid == $postv1['id']) : ?>
+            <a href="assigned_tasks.php" class="dashboard-card">
+                <i class="bi bi-list-task card-icon text-primary"></i>
+                <h3 class="card-label">Tâches Assignées</h3>
+            </a>
+            <?php endif; ?>
 
-            <?php if ($postid == $postv['id'] || $postid == $postv1['id']) { ?>
-                <div class="col-md-3 col-12 h-50 p-0">
-                    <a href="assigned_tasks.php" class="d-flex flex-column justify-content-center align-items-center custom-link" style="height:250px; text-decoration: none;">
-                        <i class="bi bi-list-task custom-icon" style="font-size: 100px; width: 100%; color:blue;"></i>
-                        <h5 class="text-white">TÂCHES ASSIGNÉES</h5>
-                    </a>
-                </div>
-            <?php } ?>
-
-            <?php if ($postid == $postv2['id'] ) { ?>
-                <div class="col-md-3 col-12 h-50 p-0">
-                    <a href="home.php" class="d-flex flex-column justify-content-center align-items-center custom-link" style="height:250px; text-decoration: none;">
-                        <i class="bi bi-list-task custom-icon" style="font-size: 100px; width: 100%; color:blue;"></i>
-                        <h5 class="text-white">PAGE ADMIN</h5>
-                    </a>
-                </div>
-            <?php } ?>
+            <?php if ($postid == $postv2['id']) : ?>
+            <a href="home.php" class="dashboard-card">
+                <i class="bi bi-gear-fill card-icon text-secondary"></i>
+                <h3 class="card-label">Administration</h3>
+            </a>
+            <?php endif; ?>
         </div>
+        </div>
+    </div>
+
     </div>
 </div>
 
@@ -315,13 +448,14 @@ if (!$user) {
     background-color: #f8f9fa;
     color: #333;
 }
-        
+     
+
     </style>
 </head>
 <body>
 
     <div class="container mt-5">
-        <h1 class="text-center">Calendrier des Événements</h1>
+        <h1 class="text-center">Calendrier des Tâches</h1>
         <div id="calendar"></div>
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
@@ -333,28 +467,60 @@ if (!$user) {
     <br>
     <button class="stopAlarmButton" style="margin-top: 10px;">Arrêter l'alarme</button>
     <button class="remindLaterButton" style="margin-top: 10px;">Me rappeler plus tard</button>
-    <audio id="alarmSound" src="/t/images/ALRMClok_Reveil electronique sonnerie 1 (ID 0035)_LS.mp3" preload="auto"></audio>
+    <audio id="alarmSound" src="/TA/sounds/alert.mp3" preload="auto"></audio>
 </div>
 
 <script>
-    const alarmSound = document.getElementById('alarmSound');
+// Déclaration des variables globales
 let notifiedEvents = JSON.parse(localStorage.getItem('notifiedEvents')) || {};
 let delayedReminders = JSON.parse(localStorage.getItem('delayedReminders')) || {};
 
-// Gestion des erreurs audio
-alarmSound.addEventListener('error', (e) => {
-    console.error('Erreur de chargement de l\'audio :', e);
-    console.error('Code d\'erreur :', alarmSound.error.code);
-    console.error('Message d\'erreur :', alarmSound.error.message);
-});
+const alarmSound = document.getElementById('alarmSound');
+alarmSound.src = '/TA/sounds/alert.mp3';
 
-function showAlarmAlert(eventTitle, eventId) {
-    alarmSound.play().then(() => {
-        console.log('Audio is playing');
-    }).catch(error => {
-        console.error('Erreur lors de la lecture de l\'audio :', error);
+function stopAlarm(eventId) {
+    // Marquer l'événement comme notifié
+    notifiedEvents[eventId] = true;
+    // Supprimer tout rappel différé
+    delete delayedReminders[eventId];
+    // Mettre à jour le stockage local
+    localStorage.setItem('notifiedEvents', JSON.stringify(notifiedEvents));
+    localStorage.setItem('delayedReminders', JSON.stringify(delayedReminders));
+    // Arrêter le son
+    alarmSound.pause();
+    alarmSound.currentTime = 0;
+}
+
+function remindLater(eventId, eventStart) {
+    const now = Date.now();
+    const eventStartTime = new Date(eventStart).getTime();
+    const nextReminder = now + 300000; // 5 minutes en millisecondes
+
+    // Vérifier si le rappel est possible avant le début
+    if (nextReminder < eventStartTime) {
+        delayedReminders[eventId] = nextReminder;
+    } else {
+        delete delayedReminders[eventId];
+    }
+
+    // Réactiver les notifications pour cet événement
+    delete notifiedEvents[eventId];
+    
+    // Mettre à jour le stockage local
+    localStorage.setItem('delayedReminders', JSON.stringify(delayedReminders));
+    localStorage.setItem('notifiedEvents', JSON.stringify(notifiedEvents));
+    
+    // Arrêter le son immédiatement
+    alarmSound.pause();
+    alarmSound.currentTime = 0;
+}
+
+function showAlarmAlert(eventTitle, eventId, eventStart) {
+    alarmSound.play().catch(error => {
+        console.error('Erreur audio:', error);
+        Swal.fire('Erreur', 'Son d\'alarme introuvable', 'error');
     });
-
+    
     Swal.fire({
         title: "La tâche \"" + eventTitle + "\" commence bientôt !",
         text: "Que souhaitez-vous faire ?",
@@ -365,126 +531,234 @@ function showAlarmAlert(eventTitle, eventId) {
         allowOutsideClick: false
     }).then((result) => {
         if (result.isConfirmed) {
-            console.log('Alarm stopped');
-            stopAlarm();
+            stopAlarm(eventId);
         } else {
-            console.log('Remind later');
-            remindLater(eventId);
+            remindLater(eventId, eventStart);
         }
     });
 }
 
-function stopAlarm() {
-    alarmSound.pause();
-    alarmSound.currentTime = 0;
-    Swal.close(); // Fermer l'alerte
-}
-
-function remindLater(eventId) {
-    alarmSound.pause();
-    alarmSound.currentTime = 0;
-    delayedReminders[eventId] = Date.now() + 5 * 60 * 1000; // Rappel dans 5 minutes
-    localStorage.setItem('delayedReminders', JSON.stringify(delayedReminders));
-}
-
 function checkAlarms() {
-    console.log('Checking alarms...');
+    console.log('Vérification des alarmes...');
     $.ajax({
         url: 'getevents.php',
         method: 'GET',
         dataType: 'json',
         success: function(events) {
-            console.log('Events retrieved:', events);
-            const currentTime = new Date();
+            const now = Date.now();
             events.forEach(event => {
-                const eventStartTime = new Date(event.start);
-                const alarmTime = new Date(eventStartTime - event.alarme * 60 * 1000);
-                if (currentTime >= alarmTime && currentTime < eventStartTime) {
+                if (!event.alarme) return;
+
+                const eventStart = new Date(event.start).getTime();
+                const alarmTime = eventStart - (event.alarme * 60000);
+
+                // Déclencher l'alarme initiale
+                if (now >= alarmTime && now <= eventStart) {
                     if (!notifiedEvents[event.id] && !delayedReminders[event.id]) {
-                        if (Notification.permission === "granted") {
-                            console.log('Showing alarm for event:', event.title);
-                            showAlarmAlert(event.title, event.id);
-                            notifiedEvents[event.id] = true;
-                            localStorage.setItem('notifiedEvents', JSON.stringify(notifiedEvents));
-                        }
+                        showAlarmAlert(event.title, event.id, event.start);
+                        notifiedEvents[event.id] = true;
+                        localStorage.setItem('notifiedEvents', JSON.stringify(notifiedEvents));
                     }
-                } else if (delayedReminders[event.id] && currentTime >= delayedReminders[event.id]) {
-                    if (Notification.permission === "granted") {
-                        console.log('Showing delayed alarm for event:', event.title);
-                        showAlarmAlert(event.title, event.id);
-                        delete delayedReminders[event.id];
-                        localStorage.setItem('delayedReminders', JSON.stringify(delayedReminders));
-                    }
+                }
+
+                // Gérer les rappels différés récurrents
+                if (delayedReminders[event.id] && now >= delayedReminders[event.id]) {
+                    showAlarmAlert(event.title, event.id, event.start);
+                    delete delayedReminders[event.id];
+                    localStorage.setItem('delayedReminders', JSON.stringify(delayedReminders));
                 }
             });
         },
-        error: function(jqXHR, textStatus, errorThrown) {
-            console.error('Erreur lors de la récupération des événements : ', textStatus, errorThrown);
-            console.error('Réponse du serveur :', jqXHR.responseText);
+        error: function(xhr, status, error) {
+            console.error('Erreur fetch:', status, error);
         }
     });
 }
 
+// Vérifier les alarmes toutes les minutes
 setInterval(checkAlarms, 60000);
-checkAlarms();
+checkAlarms(); // Vérification initiale
 </script>
-
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
-
-
     <!-- Modal pour modifier ou supprimer un événement -->
+    <style>
+    /* Styles personnalisés pour le modal */
+    #eventModal .modal-content {
+        border-radius: 12px;
+        border: none;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    }
+
+    #eventModal .modal-header {
+        background: linear-gradient(135deg, #2c3e50, #3498db);
+        color: white;
+        border-radius: 10px 10px 0 0;
+        padding: 1.5rem;
+        border-bottom: none;
+    }
+
+    #eventModal .modal-title {
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        font-size: 1.4rem;
+    }
+
+    #eventModal .close {
+        color: white;
+        opacity: 0.8;
+        text-shadow: none;
+        transition: opacity 0.2s ease;
+    }
+
+    #eventModal .close:hover {
+        opacity: 1;
+    }
+
+    #eventModal .modal-body {
+        padding: 2rem;
+        background: #f8f9fa;
+    }
+
+    #eventModal .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    #eventModal label {
+        font-weight: 500;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+    }
+
+    #eventModal .form-control {
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        border: 1px solid #e0e0e0;
+        transition: all 0.3s ease;
+    }
+
+    #eventModal .form-control:focus {
+        border-color: #3498db;
+        box-shadow: 0 0 0 3px rgba(52,152,219,0.1);
+    }
+
+    #eventModal #eventModalDescription {
+        border: 1px solid #e0e0e0;
+        padding: 1rem;
+        border-radius: 8px;
+        background: white;
+        min-height: 100px;
+        color: #555;
+    }
+
+    #eventModal .modal-footer {
+        border-top: 1px solid #eee;
+        padding: 1.5rem;
+        background: #f8f9fa;
+    }
+
+    #eventModal .btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    #eventModal .btn-primary {
+        background: #3498db;
+        border-color: #3498db;
+    }
+
+    #eventModal .btn-primary:hover {
+        background: #2980b9;
+        transform: translateY(-1px);
+    }
+
+    #eventModal .btn-danger {
+        background: #e74c3c;
+        border-color: #e74c3c;
+    }
+
+    #eventModal .btn-danger:hover {
+        background: #c0392b;
+        transform: translateY(-1px);
+    }
+
+    /* Disposition des champs date/heure */
+    .datetime-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    
+
+    @media (max-width: 576px) {
+        .datetime-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
 <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="eventModalTitle"></h5>
+                <h5 class="modal-title" id="eventModalTitle">Gestion d'événement</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <p><strong>Début :</strong> <span id="eventModalStart"></span></p>
-                <p><strong>Fin :</strong> <span id="eventModalEnd"></span></p>
-                <div class="form-group">
-                    <label for="editTitle">Modifier le titre :</label>
-                    <input type="text" class="form-control" id="editTitle">
+                <div class="mb-4">
+                    <p class="text-muted mb-1"><i class="bi bi-calendar-event mr-2"></i>Début : <span id="eventModalStart" class="font-weight-bold text-dark"></span></p>
+                    <p class="text-muted"><i class="bi bi-clock-history mr-2"></i>Fin : <span id="eventModalEnd" class="font-weight-bold text-dark"></span></p>
                 </div>
+
                 <div class="form-group">
-                    <label>Description :</label>
-                    <div id="eventModalDescription" style="border: 1px solid #ddd; padding: 10px; border-radius: 4px; margin-bottom: 15px; background-color: #f9f9f9;"></div>
+                    <label for="editTitle">Titre de l'événement</label>
+                    <input type="text" class="form-control" id="editTitle" placeholder="Saisir le titre">
                 </div>
+
                 <div class="form-group">
-                    <label for="editDescription">Modifier la description :</label>
-                    <textarea class="form-control" id="editDescription" rows="3"></textarea>
+                    <label>Description actuelle</label>
+                    <div id="eventModalDescription" class="editable-content"></div>
                 </div>
+
                 <div class="form-group">
-                    <label for="editStartDate">Date de début :</label>
-                    <input type="date" class="form-control" id="editStartDate">
+                    <label for="editDescription">Modifier la description</label>
+                    <textarea class="form-control" id="editDescription" rows="3" placeholder="Ajouter une description..."></textarea>
                 </div>
-                <div class="form-group">
-                    <label for="editStartTime">Heure de début :</label>
-                    <input type="time" class="form-control" id="editStartTime">
-                </div>
-                <div class="form-group">
-                    <label for="editEndDate">Date de fin :</label>
-                    <input type="date" class="form-control" id="editEndDate">
-                </div>
-                <div class="form-group">
-                    <label for="editEndTime">Heure de fin :</label>
-                    <input type="time" class="form-control" id="editEndTime">
+
+                <div class="datetime-grid">
+                    <div class="form-group">
+                        <label for="editStartDate">Date de début</label>
+                        <input type="date" class="form-control" id="editStartDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="editStartTime">Heure de début</label>
+                        <input type="time" class="form-control" id="editStartTime">
+                    </div>
+                    <div class="form-group">
+                        <label for="editEndDate">Date de fin</label>
+                        <input type="date" class="form-control" id="editEndDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="editEndTime">Heure de fin</label>
+                        <input type="time" class="form-control" id="editEndTime">
+                    </div>
                 </div>
 
                 <input type="hidden" id="eventId">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                <button type="button" class="btn btn-primary" onclick="confirmUpdateEvent()">Modifier</button>
+                <button class="btn btn-outline-secondary" data-dismiss="modal">
+                    <a href="dashboard.php">Annuler</a>
+                </button>
                 <button type="button" class="btn btn-danger" onclick="confirmDeleteEvent()">Supprimer</button>
+                <button type="button" class="btn btn-primary" onclick="confirmUpdateEvent()">Enregistrer</button>
             </div>
         </div>
     </div>
 </div>
-
     <script>
         // Assurez-vous que ces scripts sont bien chargés dans votre page
 $(document).ready(function() {
@@ -530,58 +804,93 @@ function urlify(text) {
 
 
 // Formulaire SweetAlert2 pour ajouter un nouvel événement
-                
+             
 select: function(start, end) {
     Swal.fire({
-        title: 'Ajouter un événement',
+        title: '➕ Ajouter une nouvelle tâche',
         html: `
-            <div class="row">
-                <div class="col-12 mb-2">
-                    <input id="swalEvtTitle" class="swal2-input" placeholder="Titre de l'événement">
+            <div class="swal2-form-container">
+                <div class="form-group mas-form-group">
+                    <input id="swalEvtTitle" 
+                           class="form-control mas-input" 
+                           placeholder="Titre de la tâche">
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-12 mb-2">
-                    <textarea id="swalEvtDesc" class="swal2-textarea" placeholder="Description de l'événement"></textarea>
+
+                <div class="form-group mas-form-group">
+                    <textarea id="swalEvtDesc" 
+                              class="form-control mas-textarea" 
+                              placeholder="Détails de la tâche..."
+                              rows="3"></textarea>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-6 mb-2">
-                    <label>Date de début</label>
-                    <input id="swalEvtStartDate" type="date" class="swal2-input" value="${start.format('YYYY-MM-DD')}">
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="form-group mas-form-group">
+                            <label class="mas-label"><i class="fas fa-calendar-start me-2"></i>Date début</label>
+                            <input type="date" 
+                                   id="swalEvtStartDate" 
+                                   class="form-control mas-input-date" 
+                                   value="${start.format('YYYY-MM-DD')}">
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="form-group mas-form-group">
+                            <label class="mas-label"><i class="fas fa-clock me-2"></i>Heure début</label>
+                            <input type="time" 
+                                   id="swalEvtStartTime" 
+                                   class="form-control mas-input-time">
+                        </div>
+                    </div>
                 </div>
-                <div class="col-6 mb-2">
-                    <label>Heure de début</label>
-                    <input id="swalEvtStartTime" type="time" class="swal2-input">
+
+                <div class="row g-3 mt-2">
+                    <div class="col-md-6">
+                        <div class="form-group mas-form-group">
+                            <label class="mas-label"><i class="fas fa-calendar-end me-2"></i>Date fin</label>
+                            <input type="date" 
+                                   id="swalEvtEndDate" 
+                                   class="form-control mas-input-date" 
+                                   value="${end.format('YYYY-MM-DD')}">
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="form-group mas-form-group">
+                            <label class="mas-label"><i class="fas fa-clock me-2"></i>Heure fin</label>
+                            <input type="time" 
+                                   id="swalEvtEndTime" 
+                                   class="form-control mas-input-time">
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-6 mb-2">
-                    <label>Date de fin</label>
-                    <input id="swalEvtEndDate" type="date" class="swal2-input" value="${end.format('YYYY-MM-DD')}">
+
+                <div class="form-group mas-form-group mt-3">
+                    <label class="mas-label"><i class="fas fa-bell me-2"></i>Rappel</label>
+                    <select id="alarmTime" class="form-select mas-select">
+                        <option value="">Aucun rappel</option>
+                        <option value="5">5 minutes avant</option>
+                        <option value="10">10 minutes avant</option>
+                        <option value="30">30 minutes avant</option>
+                    </select>
                 </div>
-                <div class="col-6 mb-2">
-                    <label>Heure de fin</label>
-                    <input id="swalEvtEndTime" type="time" class="swal2-input">
+
+                <div class="form-group mas-form-group mt-3" id="assignToEmployees">
+                    <label class="mas-label"><i class="fas fa-users me-2"></i>Assignation</label>
+                    <!-- Employés chargés dynamiquement -->
                 </div>
-            </div>
-            <div class="form-group">
-                <label for="alarmTime">Définir une alarme de rappel:</label>
-                <select class="swal2-input" id="alarmTime">
-                    <option value="">Aucun rappel</option>
-                    <option value="5">5 minutes avant</option>
-                    <option value="10">10 minutes avant</option>
-                    <option value="30">30 minutes avant</option>
-                </select>
-            </div>
-            <div class="form-group" id="assignToEmployees">
-                <!-- Les employés seront chargés ici dynamiquement -->
             </div>
         `,
         focusConfirm: false,
         showCancelButton: true,
-        confirmButtonText: 'Enregistrer',
-        cancelButtonText: 'Annuler',
+        confirmButtonText:  ' <i class="fas fa-save me-2" ></i>Enregistrer',
+        cancelButtonText: '<i class="fas fa-times me-2"></i>Annuler',
+        customClass: {
+            popup: 'swal2-mas-popup',
+            confirmButton: 'btn btn-mas-primary',
+            cancelButton: 'btn btn-mas-secondary',
+            input: 'mas-swal-input'
+        },
         didOpen: () => {
             // Charger les employés de la direction de l'utilisateur connecté
             $.ajax({
@@ -686,7 +995,7 @@ select: function(start, end) {
         }
     });
     $('#calendar').fullCalendar('unselect');
-},
+} ,
 
 
                 // Afficher un modal pour modifier ou supprimer l'événement
@@ -844,5 +1153,97 @@ select: function(start, end) {
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
     <?php include 'footer.php'; ?>
+    <style>
+        :root {
+            --mas-primary: #2A2F4F;
+            --mas-secondary: #917FB3;
+            --mas-accent: #E5BEEC;
+            --mas-light: #FDE2F3;
+            --mas-dark: #2c3e50;
+        }
+
+        /* Styles personnalisés pour SweetAlert */
+        .swal2-mas-popup {
+            font-family: 'Inter', sans-serif;
+            border-radius: 1rem !important;
+            background: #f8f9fa !important;
+            padding: 2rem !important;
+        }
+
+        .swal2-mas-popup .swal2-title {
+            color: var(--mas-primary);
+            font-weight: 700;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .mas-form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .mas-label {
+            display: block;
+            color: var(--mas-primary);
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .mas-input, .mas-textarea, .mas-select {
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            border: 2px solid #e9ecef;
+            border-radius: 0.8rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: white;
+            font-size: 1rem;
+        }
+
+        .mas-input:focus, .mas-textarea:focus, .mas-select:focus {
+            border-color: var(--mas-secondary);
+            box-shadow: 0 0 0 3px rgba(145, 127, 179, 0.15);
+            outline: none;
+        }
+
+        .mas-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .mas-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232A2F4F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1.2rem center;
+            background-size: 1.2em;
+        }
+
+        .btn-mas-primary {
+            background: var(--mas-primary) !important;
+            color: white !important;
+            padding: 0.8rem 2rem !important;
+            border-radius: 0.8rem !important;
+            font-weight: 600 !important;
+            transition: transform 0.2s ease;
+        }
+
+        .btn-mas-primary:hover {
+            transform: translateY(-1px);
+            opacity: 0.9;
+        }
+
+        .btn-mas-secondary {
+            background: var(--mas-secondary) !important;
+            color: white !important;
+            padding: 0.8rem 2rem !important;
+            border-radius: 0.8rem !important;
+            font-weight: 600 !important;
+        }
+
+        .swal2-actions {
+            gap: 1rem;
+        }
+    </style>
 </body>
 </html>
